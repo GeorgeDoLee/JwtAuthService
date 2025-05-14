@@ -1,4 +1,5 @@
-﻿using JwtAuthService.Application.Services;
+﻿using JwtAuthService.Application.Interfaces;
+using JwtAuthService.Application.Interfaces;
 using JwtAuthService.Application.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,5 +22,6 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<IRoleService, RoleService>();
     }
 }

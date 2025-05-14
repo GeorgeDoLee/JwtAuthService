@@ -1,7 +1,7 @@
 ﻿using JwtAuthService.Application.Models.Responses;
 using JwtAuthService.Domain.Entities;
 
-namespace JwtAuthService.Application.Services;
+namespace JwtAuthService.Application.Interfaces;
 
 public interface ITokenService
 {

@@ -1,7 +1,7 @@
 ﻿using JwtAuthService.Application.Models.Requests;
 using JwtAuthService.Domain.Entities;
 
-namespace JwtAuthService.Application.Services;
+namespace JwtAuthService.Application.Interfaces;
 
 public interface IAuthorizationService
 {

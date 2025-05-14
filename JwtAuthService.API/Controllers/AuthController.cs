@@ -1,6 +1,5 @@
 ﻿using JwtAuthService.API.Responses;
-using JwtAuthService.Application.Models.Responses;
-using JwtAuthService.Application.Services;
+using JwtAuthService.Application.Interfaces;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using LoginRequest = JwtAuthService.Application.Models.Requests.LoginRequest;
@@ -28,9 +27,9 @@ public class AuthController : ControllerBase
         var userRegistered = await _authorizationService.RegisterUserAsync(loginUser);
 
         return userRegistered ?
-            Ok(ApiResponse<string>.SuccessResponse("Registration finished successfully."))
+            Ok(ApiResponse.SuccessResponse("Registration finished successfully."))
             :
-            BadRequest(ApiResponse<string>.FailResponse("Registration failed."));
+            BadRequest(ApiResponse.FailResponse("Registration failed."));
     }
 
     [HttpPost("login")]
@@ -42,10 +41,10 @@ public class AuthController : ControllerBase
         {
             var tokenResponse = await _tokenService.GenerateTokenAsync(loggedInUser);
 
-            return Ok(ApiResponse<TokenResponse>.SuccessResponse(tokenResponse, "Login successful"));
+            return Ok(ApiResponse.SuccessResponse(tokenResponse, "Login successful"));
         }
 
-        return BadRequest(ApiResponse<string>.FailResponse("Invalid credentials"));
+        return BadRequest(ApiResponse.FailResponse("Invalid credentials"));
     }
 
     [HttpPost("refresh")]

@@ -1,4 +1,5 @@
-﻿using JwtAuthService.Application.Models.Responses;
+﻿using JwtAuthService.Application.Interfaces;
+using JwtAuthService.Application.Models.Responses;
 using JwtAuthService.Application.Settings;
 using JwtAuthService.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -7,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace JwtAuthService.Application.Services;
+namespace JwtAuthService.Application.Interfaces;
 
 internal class TokenService : ITokenService
 {
