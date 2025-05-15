@@ -5,5 +5,5 @@ namespace JwtAuthService.Application.Interfaces;
 
 public interface ITokenService
 {
-    Task<TokenResponse> GenerateTokenAsync(User user);
+    Task<TokenResponse> GenerateTokens(User user);
 }

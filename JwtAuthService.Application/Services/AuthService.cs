@@ -3,15 +3,18 @@ using JwtAuthService.Application.Models.Requests;
 using JwtAuthService.Domain.Constants;
 using JwtAuthService.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.EntityFrameworkCore;
+using LoginRequest = JwtAuthService.Application.Models.Requests.LoginRequest;
 
 namespace JwtAuthService.Application.Interfaces;
 
-internal class AuthorizationService : IAuthorizationService
+internal class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
 
-    public AuthorizationService(
+    public AuthService(
         UserManager<User> userManager,
         SignInManager<User> signInManager)
     {
@@ -54,5 +57,13 @@ internal class AuthorizationService : IAuthorizationService
         }
 
         return await _userManager.FindByNameAsync(loginUser.Username);
+    }
+
+    public async Task<User?> FindUserByRefreshToken(string refreshToken)
+    {
+        var user = await _userManager.Users
+            .FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+
+        return user;
     }
 }

@@ -3,7 +3,6 @@ using JwtAuthService.Application.Interfaces;
 using JwtAuthService.Application.Models.Requests;
 using JwtAuthService.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JwtAuthService.API.Controllers;
@@ -95,21 +94,21 @@ public class RolesController : ControllerBase
         return Ok(ApiResponse.SuccessResponse(null!, "Role deleted successfully."));
     }
 
-    [HttpGet("{roleId}/claims")]
-    public Task<IActionResult> GetClaimsByRole(int roleId)
-    {
-        throw new NotImplementedException();
-    }
+    //[HttpGet("{roleId}/claims")]
+    //public Task<IActionResult> GetClaimsByRole(int roleId)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
-    [HttpPost("{roleId}/claims")]
-    public Task<IActionResult> AddClaimsToRoles(int roleId)
-    {
-        throw new NotImplementedException();
-    }
+    //[HttpPost("{roleId}/claims")]
+    //public Task<IActionResult> AddClaimsToRoles(int roleId)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
-    [HttpDelete("{roleId}/claims/{claimId}")]
-    public Task<IActionResult> RemoveClaimFromRole(int roleId, int claimId)
-    {
-        throw new NotImplementedException();
-    }
+    //[HttpDelete("{roleId}/claims/{claimId}")]
+    //public Task<IActionResult> RemoveClaimFromRole(int roleId, int claimId)
+    //{
+    //    throw new NotImplementedException();
+    //}
 }

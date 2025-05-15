@@ -2,6 +2,7 @@
 using JwtAuthService.Application.Interfaces;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using LoginRequest = JwtAuthService.Application.Models.Requests.LoginRequest;
 
 namespace JwtAuthService.API.Controllers;
@@ -10,21 +11,21 @@ namespace JwtAuthService.API.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthorizationService _authorizationService;
+    private readonly IAuthService _authService;
     private readonly ITokenService _tokenService;
 
     public AuthController(
-        IAuthorizationService authorizationService,
+        IAuthService authService,
         ITokenService tokenService)
     {
-        _authorizationService = authorizationService;
+        _authService = authService;
         _tokenService = tokenService;
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register(LoginRequest loginUser)
     {
-        var userRegistered = await _authorizationService.RegisterUserAsync(loginUser);
+        var userRegistered = await _authService.RegisterUserAsync(loginUser);
 
         return userRegistered ?
             Ok(ApiResponse.SuccessResponse("Registration finished successfully."))
@@ -35,22 +36,36 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest loginUser)
     {
-        var loggedInUser = await _authorizationService.LoginUserAsync(loginUser);
+        var loggedInUser = await _authService.LoginUserAsync(loginUser);
 
         if (loggedInUser != null)
         {
-            var tokenResponse = await _tokenService.GenerateTokenAsync(loggedInUser);
+            var tokenResponse = await _tokenService.GenerateTokens(loggedInUser);
 
-            return Ok(ApiResponse.SuccessResponse(tokenResponse, "Login successful"));
+            return Ok(ApiResponse.SuccessResponse(tokenResponse, "Logged in successfully"));
         }
 
         return BadRequest(ApiResponse.FailResponse("Invalid credentials"));
     }
 
     [HttpPost("refresh")]
-    public Task<IActionResult> Refresh(RefreshRequest refreshRequest)
+    public async Task<IActionResult> Refresh(RefreshRequest refreshRequest)
     {
-        throw new NotImplementedException();
+        if (refreshRequest == null || refreshRequest.RefreshToken.IsNullOrEmpty())
+        {
+            return BadRequest(ApiResponse.FailResponse("Invalid data."));
+        }
+
+        var user = await _authService.FindUserByRefreshToken(refreshRequest.RefreshToken);
+
+        if (user != null)
+        {
+            var tokenResponse = await _tokenService.GenerateTokens(user);
+
+            return Ok(ApiResponse.SuccessResponse(tokenResponse, "token refreshed successfully"));
+        }
+
+        return NotFound(ApiResponse.FailResponse("User not found."));
     }
 
     [HttpPost("logout")]
